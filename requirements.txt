@@ -1,0 +1,5 @@
+beautifulsoup4
+lucide-fasthtml
+python-dotenv
+python-fasthtml
+requests
