@@ -7,6 +7,8 @@
 
 .bluesky-comment {
   transition: all 0.2s ease;
+  margin-bottom: 12px;
+  border-radius: 8px;
 }
 
 .bluesky-comment:hover {
@@ -15,11 +17,12 @@
 }
 
 .bluesky-avatar {
-  width: 52px;
-  height: 52px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
+  margin-right: 12px;
 }
 
 .bluesky-avatar img {
@@ -29,9 +32,9 @@
 }
 
 .bluesky-avatar-default {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  border-radius: 21px;
   background-color: #1d9bf0;
   color: white;
   display: flex;
@@ -39,37 +42,47 @@
   justify-content: center;
   font-weight: bold;
   flex-shrink: 0;
-  font-size: 0.875rem;
+  font-size: 1rem;
+  margin-right: 12px;
 }
 
 .bluesky-author-name {
   font-weight: 600;
-  display: inline-block;
+  font-size: 16.875px;
+  line-height: 22px;
+  color: #0b0f14;
+  display: block;
 }
 
 .bluesky-author-handle {
-  color: #6b7280;
-  margin-left: 0.25rem;
-  font-size: 0.875rem;
+  color: #42576c;
+  font-size: 15px;
+  line-height: 20px;
+  display: block;
+  margin-top: -4px;
 }
 
 .bluesky-timestamp {
-  color: #6b7280;
-  font-size: 0.75rem;
-  margin-top: 0.5rem;
+  color: #42576c;
+  font-size: 13.125px;
+  margin-top: 12px;
 }
 
 .bluesky-content {
-  margin: 0.5rem 0;
+  margin-top: 8px;
+  margin-bottom: 8px;
   white-space: pre-wrap;
   word-break: break-word;
+  font-size: 18.75px;
+  line-height: 24px;
+  color: #0b0f14;
 }
 
 .bluesky-cta {
   margin-top: 1rem;
   display: inline-block;
   background-color: #1d9bf0;
-  color: white;
+  color: white !important;
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-weight: 500;
@@ -79,7 +92,7 @@
 
 .bluesky-cta:hover {
   background-color: #0c85d0;
-  color: white;
+  color: white !important;
 }
 
 .bluesky-empty {
@@ -88,4 +101,41 @@
   background-color: #f9fafb;
   border-radius: 0.5rem;
   color: #6b7280;
+}
+
+.bluesky-comment-card {
+  padding: 16px;
+  border-color: #d4dbe2;
+  border-bottom: 1px solid #d4dbe2;
+}
+
+.bluesky-comment-container {
+  display: flex;
+  padding-bottom: 8px;
+}
+
+.bluesky-comment-header {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.bluesky-likes {
+  margin-top: 12px;
+  font-size: 15px;
+  color: #42576c;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bluesky-likes-count {
+  font-weight: 600;
+  color: #0b0f14;
+}
+
+.bluesky-date-separator {
+  display: inline-block;
+  margin: 0 5px;
+  color: #42576c;
 }

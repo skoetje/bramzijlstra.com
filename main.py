@@ -1,9 +1,3 @@
-import os
-os.environ['BLUESKY_HANDLE'] = 'bramzijlstra.com'
-os.environ['BLUESKY_PASSWORD'] = 'Asrg75c2!'
-
-
-
 from fasthtml.common import *
 from lucide_fasthtml import Lucide
 import yaml
@@ -103,45 +97,42 @@ def BlueskyComments(comments_data, bluesky_url):
             f"{len(comments)} comment{'s' if len(comments) != 1 else ''} from Bluesky",
             cls="uk-text-muted uk-text-small uk-margin-small-bottom"
         ),
-        *[Div(
-            Div(
+        Div(
+            *[Div(
                 Div(
+                    cls="bluesky-comment-container"
+                )(
                     Div(
+                        cls="bluesky-avatar"
+                    )(
                         Img(
                             src=comment.get("author", {}).get("avatar"),
                             alt=f"Avatar of @{comment.get('author', {}).get('handle')}",
                             cls="uk-border-circle",
                         ) if comment.get("author", {}).get("avatar") else default_avatar(
-                            comment.get("author", {}).get("handle", "")),
-                        cls="bluesky-avatar"
+                            comment.get("author", {}).get("handle", ""))
                     ),
                     Div(
+                        cls="bluesky-comment-header"
+                    )(
                         Div(
-                            Span(
-                                comment.get("author", {}).get("name", "Anonymous"),
-                                cls="bluesky-author-name"
-                            ),
-                            Span(
-                                f"@{comment.get('author', {}).get('handle', '')}",
-                                cls="bluesky-author-handle"
-                            ),
-                        ),
-                        P(
-                            comment.get("content", ""),
+                            cls="bluesky-author-name"
+                        )(comment.get("author", {}).get("name", "Anonymous")),
+                        Div(
+                            cls="bluesky-author-handle"
+                        )(f"@{comment.get('author', {}).get('handle', '')}"),
+                        Div(
                             cls="bluesky-content"
-                        ),
-                        P(
-                            format_bluesky_date(comment.get("timestamp", "")),
+                        )(comment.get("content", "")),
+                        Div(
                             cls="bluesky-timestamp"
-                        ),
-                        style="flex: 1;"
-                    ),
-                    cls="uk-flex uk-flex-top"
+                        )(format_bluesky_date(comment.get("timestamp", ""))),
+                    )
                 ),
-                cls="uk-card-body"
-            ),
-            cls="uk-card uk-card-default uk-border-rounded uk-margin-small-bottom uk-box-shadow-small bluesky-comment"
-        ) for comment in comments],
+                cls="bluesky-comment-card bluesky-comment"
+            ) for comment in comments],
+            cls="uk-margin-medium-bottom"
+        ),
         A(
             Lucide("message-circle", cls="w-4 h-4 mr-2"),
             "Join the conversation on Bluesky",
@@ -210,7 +201,6 @@ def get():
                         post["excerpt"] if "excerpt" in post else "",
                         cls="uk-text-muted uk-margin-small-top marked",
                     ),
-                    bluesky_badge,
                     href=f"/posts/{post['slug']}",
                 ),
                 cls="uk-card-body",
