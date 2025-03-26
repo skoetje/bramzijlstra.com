@@ -9,11 +9,7 @@ from bluesky_utils import fetch_bluesky_comments, format_bluesky_date
 if not os.path.exists("cache"):
     os.makedirs("cache")
 
-plausible = Script(
-    defer=True,
-    data_domain="blog.mariusvach.com",
-    src="https://plausible.io/js/script.js",
-)
+
 frankenui = (
     Link(
         rel="stylesheet",
@@ -36,8 +32,7 @@ app, rt = fast_app(
         frankenui,
         tailwind,
         bluesky_css,
-        plausible,
-        Meta(name='google-site-verification', content='AHzT8BdRGuJ20gfBTqIHtWBGoleIfJ0e9gfjWwA_7HA'),
+        Meta(name='google-site-verification', content='itQt7wzA-lxt_NZlV4e5GOMtF3TLj_DGdTXnwCP5aN4'),
         *og_headers,
         MarkdownJS(),
         HighlightJS(langs=["python", "bash", "yaml", "json"], light="atom-one-dark"),
@@ -221,12 +216,13 @@ def get():
         P(
             "I'm a machine learning engineer and co-founder of ",
             A("BQ Insights", href="https://bqinsights.nl", style="color: #9ca3af; text-decoration: underline;"),
-            ", an AI and data consulting firm focused on building pragmatic, high-impact solutions. My experience ranges from leading teams as a Tech Lead at ",
+            ", an AI and data consulting firm focused on building pragmatic, high-impact solutions. My experience ranges from being a Tech Lead at ",
             A("Media Distillery", href="https://mediadistillery.com",
               style="color: #9ca3af; text-decoration: underline;"),
-            " to working as a freelancer for ",
-            A("Eindsprint", href="https://eindsprint.nl", style="color: #9ca3af; text-decoration: underline;"),
-            " and the ",
+            " to working as a freelance data scientist for ",
+            #A("Eindsprint", href="https://eindsprint.nl", style="color: #9ca3af; text-decoration: underline;"),
+            #" and",
+            " the ",
             A("Dutch Chamber of Commerce", href="https://www.kvk.nl",
               style="color: #9ca3af; text-decoration: underline;"),
             ". I hold a degree in Artificial Intelligence and Philosophy.",
@@ -296,9 +292,9 @@ def get(slug: str):
         ),
         Meta(
             name="twitter:image",
-            content=f"https://blog.mariusvach.com/images/{frontmatter['image']}"
+            content=f"https://blog.bramzijlstra.com/images/{frontmatter['image']}"
             if "image" in frontmatter
-            else "https://blog.mariusvach.com/images/og.png",
+            else "https://blog.bramzijlstra.com/images/og.png",
         ),
     )
 

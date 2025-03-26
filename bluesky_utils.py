@@ -8,7 +8,12 @@ from atproto import Client
 from bluesky_cache import BlueskyCache
 
 # Initialize the cache with a 1-hour TTL
+HOUR = 3600
+CACHE_TIME = HOUR / 6
 cache = BlueskyCache(ttl_seconds=3600)
+
+os.environ['BLUESKY_HANDLE'] = 'bramzijlstra.com'
+os.environ['BLUESKY_PASSWORD'] = 'Asrg75c2!'
 
 
 def extract_post_id(url: str) -> Optional[str]:
