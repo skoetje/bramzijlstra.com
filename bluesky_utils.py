@@ -2,9 +2,7 @@ import os
 os.environ['BLUESKY_HANDLE'] = 'bramzijlstra.com'
 os.environ['BLUESKY_PASSWORD'] = 'Asrg75c2!'
 
-
-
-
+# !/usr/bin/env python3
 
 import re
 import os
@@ -69,7 +67,8 @@ def fetch_bluesky_comments(bluesky_url: str) -> Optional[Dict[str, Any]]:
             "post": {
                 "author": {
                     "name": post.author.display_name,
-                    "handle": post.author.handle
+                    "handle": post.author.handle,
+                    "avatar": post.author.avatar if hasattr(post.author, 'avatar') else None
                 },
                 "content": post.record.text,
                 "timestamp": post.record.created_at
@@ -81,7 +80,8 @@ def fetch_bluesky_comments(bluesky_url: str) -> Optional[Dict[str, Any]]:
             result["comments"].append({
                 "author": {
                     "name": reply.post.author.display_name,
-                    "handle": reply.post.author.handle
+                    "handle": reply.post.author.handle,
+                    "avatar": reply.post.author.avatar if hasattr(reply.post.author, 'avatar') else None
                 },
                 "content": reply.post.record.text,
                 "timestamp": reply.post.record.created_at

@@ -1,0 +1,91 @@
+/* Custom styles for Bluesky comments */
+.bluesky-comment-section {
+  margin-top: 3rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+}
+
+.bluesky-comment {
+  transition: all 0.2s ease;
+}
+
+.bluesky-comment:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.bluesky-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bluesky-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bluesky-avatar-default {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #1d9bf0;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+  font-size: 0.875rem;
+}
+
+.bluesky-author-name {
+  font-weight: 600;
+  display: inline-block;
+}
+
+.bluesky-author-handle {
+  color: #6b7280;
+  margin-left: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.bluesky-timestamp {
+  color: #6b7280;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.bluesky-content {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bluesky-cta {
+  margin-top: 1rem;
+  display: inline-block;
+  background-color: #1d9bf0;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  text-decoration: none !important;
+  transition: background-color 0.2s ease;
+}
+
+.bluesky-cta:hover {
+  background-color: #0c85d0;
+  color: white;
+}
+
+.bluesky-empty {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  color: #6b7280;
+}
