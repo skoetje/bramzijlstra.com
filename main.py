@@ -5,6 +5,10 @@ from datetime import datetime
 import os
 from bluesky_utils import fetch_bluesky_comments, format_bluesky_date
 
+# Create cache directory if it doesn't exist
+if not os.path.exists("cache"):
+    os.makedirs("cache")
+
 plausible = Script(
     defer=True,
     data_domain="blog.mariusvach.com",

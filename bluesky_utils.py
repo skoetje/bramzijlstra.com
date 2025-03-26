@@ -1,14 +1,14 @@
-import os
-os.environ['BLUESKY_HANDLE'] = 'bramzijlstra.com'
-os.environ['BLUESKY_PASSWORD'] = 'Asrg75c2!'
-
-# !/usr/bin/env python3
+#!/usr/bin/env python3
 
 import re
 import os
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 from atproto import Client
+from bluesky_cache import BlueskyCache
+
+# Initialize the cache with a 1-hour TTL
+cache = BlueskyCache(ttl_seconds=3600)
 
 
 def extract_post_id(url: str) -> Optional[str]:
@@ -30,6 +30,14 @@ def format_bluesky_date(date_str: str) -> str:
 
 def fetch_bluesky_comments(bluesky_url: str) -> Optional[Dict[str, Any]]:
     """Fetch comments from a Bluesky post URL."""
+    # Check cache first
+    cached_data = cache.get(bluesky_url)
+    if cached_data:
+        print(f"Using cached comments for {bluesky_url}")
+        return cached_data
+
+    print(f"Fetching fresh comments for {bluesky_url}")
+
     try:
         # Initialize the client
         client = Client()
@@ -86,6 +94,9 @@ def fetch_bluesky_comments(bluesky_url: str) -> Optional[Dict[str, Any]]:
                 "content": reply.post.record.text,
                 "timestamp": reply.post.record.created_at
             })
+
+        # Cache the result
+        cache.set(bluesky_url, result)
 
         return result
 
