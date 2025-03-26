@@ -8,6 +8,8 @@ from datetime import datetime
 
 import os
 
+from blog.embed_bluesky_comments import fetch_comments_html
+
 plausible = Script(
     defer=True,
     data_domain="blog.mariusvach.com",
@@ -21,8 +23,10 @@ frankenui = (
     Script(src="https://cdn.jsdelivr.net/npm/uikit@3.21.6/dist/js/uikit.min.js"),
     Script(src="https://cdn.jsdelivr.net/npm/uikit@3.21.6/dist/js/uikit-icons.min.js"),
 )
-tailwind = Link(rel="stylesheet", href="/app.css", type="text/css")
-
+tailwind = (
+    Link(rel="stylesheet", href="/app.css", type="text/css"),
+    Link(rel="stylesheet", href="/tailwind.css", type="text/css"),
+)
 og_headers = (
     Meta(property="og:image", content="https://blog.mariusvach.com/images/og.png"),
 )
@@ -32,7 +36,7 @@ app, rt = fast_app(
     static_path="public",
     hdrs=(
         frankenui,
-        tailwind,
+        *tailwind,
         plausible,
         Meta(name='google-site-verification', content='AHzT8BdRGuJ20gfBTqIHtWBGoleIfJ0e9gfjWwA_7HA'),
         *og_headers,
@@ -56,6 +60,7 @@ def get():
                     post = yaml.safe_load(parts[1])
                     post["slug"] = os.path.splitext(filename)[0]
                     post["content"] = parts[2].strip()
+                    post["blueskyUrl"] = post.get("blueskyUrl")
                     lines = post["content"].split("\n")
                     if "excerpt" not in post:
                         for line in lines:
@@ -154,56 +159,64 @@ def get():
         cls="uk-container uk-container-xl py-16",
     )
 
+@rt("/comments/{slug}")
+def bluesky_comments(slug: str):
+    from fasthtml.common import Html
+
+    with open(f"posts/{slug}.md", "r") as file:
+        content = file.read()
+
+    frontmatter = yaml.safe_load(content.split("---")[1])
+    bluesky_url = frontmatter.get("blueskyUrl")
+
+    if not bluesky_url:
+        return Html("<div>No comments available.</div>", unsafe=True)
+
+    html_output = fetch_comments_html(bluesky_url)
+    return Html(html_output, unsafe=True)
+
+@rt("/test-html")
+def test_html():
+    html_string = """
+    <div class="bg-blue-100 text-blue-800 p-4 rounded">
+        <strong>Note:</strong> This is a test of raw HTML rendering.
+    </div>
+    """
+    from fasthtml.common import Html
+    return Html(html_string, unsafe=True)
+
 
 @rt("/posts/{slug}")
 def get(slug: str):
+    from fastapi.responses import HTMLResponse
+
     with open(f"posts/{slug}.md", "r") as file:
         content = file.read()
 
     post_content = content.split("---")[2]
-
     frontmatter = yaml.safe_load(content.split("---")[1])
+    bluesky_comments_html = fetch_comments_html(frontmatter.get("blueskyUrl", ""))
 
-    twitter_headers = (
-        Meta(name="twitter:card", content="summary"),
-        Meta(name="twitter:title", content=frontmatter["title"]),
-        Meta(
-            name="twitter:description",
-            content=frontmatter["excerpt"]
-            if "excerpt" in frontmatter
-            else "Blog by Marius Vach",
-        ),
-        Meta(
-            name="twitter:image",
-            content=f"https://blog.mariusvach.com/images/{frontmatter['image']}"
-            if "image" in frontmatter
-            else "https://blog.mariusvach.com/images/og.png",
-        ),
-    )
-
-    return (
-        *twitter_headers,
-        Title(f"{frontmatter['title']} - Marius Vach Blog"),
-        Div(
-            A(
-                Lucide("arrow-left", cls="w-4 h-4 text-black mr-2"),
-                "Go Back",
-                href="/",
-                cls="absolute md:top-0 left-0 top-2 md:-ml-48 md:mt-16 uk-button uk-button-ghost",
-            ),
-            H1(
-                frontmatter["title"],
-                cls="text-4xl font-bold font-heading tracking-tight uk-margin-small-bottom",
-            ),
-            P(
-                frontmatter["date"].strftime("%B %d, %Y"),
-                " by Marius Vach",
-                cls="uk-text-muted uk-text-small uk-text-italic",
-            ),
-            Div(post_content, cls="marked prose mx-auto uk-margin-top"),
-            cls="uk-container max-w-[65ch] mx-auto relative py-16",
-        ),
-    )
-
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>{frontmatter['title']} - Bram Zijlstra Blog</title>
+        <link rel="stylesheet" href="/app.css" />
+        <link rel="stylesheet" href="/tailwind.css" />
+    </head>
+    <body class="bg-white text-black">
+        <div class="uk-container max-w-[65ch] mx-auto py-16">
+            <a href="/" class="text-blue-500 underline block mb-6">← Go back</a>
+            <h1 class="text-4xl font-bold mb-2">{frontmatter['title']}</h1>
+            <p class="text-sm text-gray-500 mb-8">{frontmatter['date'].strftime('%B %d, %Y')} by Bram Zijlstra</p>
+            <div class="marked prose mb-12">{post_content}</div>
+            <h2 class="text-2xl font-bold mb-4">Discussion</h2>
+            {bluesky_comments_html}
+        </div>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html)
 
 serve()
